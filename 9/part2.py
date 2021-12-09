@@ -3,17 +3,13 @@ heightmap = open("input.1").read()
 heightmap = [[int(i) for i in list(line)] for line in heightmap.splitlines()]
 
 def getheight(inputmap, x, y):
-    try:
-        return inputmap[y][x]
-    except:
-        return 9 # this is the maximum value and will stop the flow, just like a regular 9
-
-def getfill(inputmap, x, y):
     if x >= 0 and x < len(inputmap[0]) and y >= 0 and y < len(inputmap):
         return inputmap[y][x]
     else:
-        return 1 # this will return 1 to cover and stop at the edge
+        return 9 # this is the maximum value and will stop the flow, just like a regular 9
 
+def getfill(inputmap, x, y):
+    return inputmap[y][x]
 
 def fill(inputmap, outputmap, x, y):
     # recursive function that from (x,y) will fill all directions until a 9 
@@ -40,6 +36,7 @@ def basinsize(basinmap):
 
 basinsizes = []
 
+printmap(heightmap)
 for y in range(len(heightmap)):
     for x in range(len(heightmap[0])):
         if getheight(heightmap, x - 1, y) > heightmap[y][x] and \
