@@ -6,12 +6,12 @@ lines = open("input.1").read()
 cave = [[int(i) for i in list(line)] for line in lines.splitlines()]
 
 def showcave(cave, step):
-#    os.system("clear")
+    os.system("clear")
     print("After step " + str(step) + ":")
     for line in cave:
         print(''.join(["\033[1;37m" + str(i) + "\033[0m" if i == 0 else str(i) for i in line]))
     print("")
-#    time.sleep(0.1)
+    time.sleep(0.1)
 
 def flash(cave, row, col):
     if row >= 0 and col >= 0 and row < len(cave) and col < len(cave[0]) and cave[row][col] != 0:
