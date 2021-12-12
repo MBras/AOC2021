@@ -1,8 +1,8 @@
 
 lines = open("input.1").read().splitlines()
 lines = open("input.test").read().splitlines()
-#lines = open("input.test2").read().splitlines()
-#lines = open("input.test3").read().splitlines()
+lines = open("input.test2").read().splitlines()
+lines = open("input.test3").read().splitlines()
 
 
 paths = {}
@@ -27,12 +27,6 @@ for line in lines:
     if path[1].islower() and not(path[1] in smallcaves):
         smallcaves.append(path[1])
 
-def inlist(l, s):
-    for i in range(len(l) - 1):
-        if s == l[i:i+2]:
-            return True
-    return False
-
 def findpaths(paths, path, startpoint):
     solutions = []
     for endpoint in paths[startpoint]:
@@ -41,7 +35,7 @@ def findpaths(paths, path, startpoint):
             temppath.append(endpoint)
             print(temppath)
             solutions.append(temppath)
-        if endpoint != "start" and not(inlist(temppath, [startpoint, endpoint])) and \
+        if endpoint != "start" and \
            not(endpoint in temppath and endpoint in smallcaves):
             temppath.append(endpoint)
             solutions += findpaths(paths, temppath, endpoint)
