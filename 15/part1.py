@@ -3,55 +3,77 @@ sys.setrecursionlimit(100000)
 
 # read cave
 c = [[int(i) for i in list(line)] for line in open("input.test").read().splitlines()]
-c = [[int(i) for i in list(line)] for line in open("input.2").read().splitlines()]
-#c = [[int(i) for i in list(line)] for line in open("input.1").read().splitlines()]
+#c = [[int(i) for i in list(line)] for line in open("input.2").read().splitlines()]
+c = [[int(i) for i in list(line)] for line in open("input.1").read().splitlines()]
 
 # height and width of the cave (often used)
 w = len(c[0])
 h = len(c)
 
-# initialize lowest risk path map
-lr = [[h * w * 9] * w for i in range(h)]
+# display cave
+print('\n'.join(''.join(str(i) for i in line) for line in c))
 
-# movement directions
-md = [[-1, 0],[1,0],[0,-1],[0,1]]
+# movement directions 
+md = [[0,-1],[0,1],[-1,0],[1,0]]
 
-# recursive function which find the least risky path from location (x,y)
-def findpath(x, y):
-    print("Checking (" + str(x) + "," + str(y) + ") ")
-    # for current location, check all surrounding location
-    for d in md:
-        cx = x + d[0]
-        cy = y + d[1]
-        if 0 <= cx < w and 0 <= cy < h:
-            print("Checking (" + str(x) + "," + str(y) + "): risk: " + str(c[x][y]) + " total risk: " + str(lr[x][y]))
-            print(" against (" + str(cx) + "," + str(cy) + "): risk: " + str(c[cx][cy]) + " total risk: " + str(lr[cx][cy]))
-            # add the risk level for current location to the target location
-            if lr[cx][cy] + c[x][y] < lr[x][y]:
-                # if it is lower than current level 
-                # fill current location with that value and stop
-                print("New path is less risky, set (" + str(x) + "," + str(y) + ") to " + str(lr[cx][cy] + c[x][y]))
-                lr[x][y] = lr[cx][cy] + c[x][y]
-                print('\n'.join(' '.join(str(i) for i in line) for line in lr))
-                findpath(x, y)
-            elif lr[cx][cy] + c[x][y] == lr[x][y]:
-                print("Equal risk, do nothing")
-                print('\n'.join(' '.join(str(i) for i in line) for line in lr))
-            elif lr[x][y] + c[cx][cy] < lr[cx][cy]:
-                # fill surrounding location with new value 
-                # and continue searching from there
-                print("Current path is less risky, set (" + str(cx) + "," + str(cy) + ") to " + str(lr[x][y] + c[cx][cy]))
-                lr[cx][cy] = lr[x][y] + c[cx][cy]
-                print('\n'.join(' '.join(str(i) for i in line) for line in lr))
-                findpath(cx, cy)
-            else:
-                print("No idea?!")
+# non visited nodes, l for the least risky path, v for the least risky connected node
+N =[] 
+l = {}
+v = {}
+for x in range(w):
+    for y in range(h):
+        N.append([x,y])
+        l[x,y]= h * w * 9
+        v[x,y] = None
 
-# initialize the startposition with the topleft value
-lr[0][0] = c[0][0]
+# visited nodes
+B = []
 
-# and find the least risky path
-findpath(0, 0)
+# current starting node
+cur = [0,0]
+l[cur[0],cur[1]] = 0 
 
-# print the score
-print(lr[-1][-1] - c[-1][-1])
+# while not all nodes have been done
+while len(N) > 0:
+    # visit all neighbours for current node
+    
+    for direction in md:
+        # determine neighnour node coordinate
+        x = cur[0] + direction[0] 
+        y = cur[1] + direction[1]
+
+        # check if the coordinates are within the cave
+        if 0 <= x < w and 0 <= y < h and [x,y] in N:
+            d = l[cur[0],cur[1]] + c[x][y]
+            # check if the new distance is less than current distance
+            if d < l[x,y]:
+                # lesser distance, update lists
+                l[x,y] = d
+                v[x,y] = cur
+    
+    # move cur from N to B
+    N.remove(cur)
+    B.append(cur)
+
+    # set new current node
+    # keep track of values for the new start node
+    sp = h * w * 9
+    spc = None
+    for node in N:
+        if l[node[0],node[1]] < sp:
+            sp = l[node[0],node[1]]
+            spc = node
+    cur = spc
+
+print("N:")
+print(N)
+print("B:")
+print(B)
+print("l:")
+print(l)
+print("v:")
+print(v)
+print("current node:")
+print(cur)
+
+print(l[w - 1, h - 1])
