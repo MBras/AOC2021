@@ -1,15 +1,15 @@
 import re
 
 input = "target area: x=20..30, y=-10..-5"     # test data
-#input = "target area: x=155..182, y=-117..-67" #puzzle data
+input = "target area: x=155..182, y=-117..-67" #puzzle data
 
 # parse input to get target area
 ta = [int(i) for i in re.findall("target area: x=(-?[\d]*)..(-?[\d]*), y=(-?[\d]*)..(-?[\d]*)", input)[0]]
 
 maxheight = 0
 counter = [] 
-for x in range(1,ta[1]):
-    for y in range (-400, 400):
+for x in range(1,1040):#ta[1]):
+    for y in range (-200, 200):
         pos      = [0,0]
         speed    = [x, y]
         overshot = False
@@ -29,6 +29,7 @@ for x in range(1,ta[1]):
             # get new y speed
             speed[1] -= 1
 
+            #print(pos)
             # check overshot
             if pos[0] > ta[1] or pos[1] < ta[2]:
                 #print("Overshot")
@@ -45,4 +46,5 @@ for x in range(1,ta[1]):
             
 print("Max height: " + str(maxheight))
 print("Options: " + str(len(counter)))
-print(counter)
+#counter.sort()
+#print(counter)
